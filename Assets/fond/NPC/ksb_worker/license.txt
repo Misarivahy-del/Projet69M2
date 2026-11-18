@@ -1,0 +1,11 @@
+Model Information:
+* title:	KSB Worker
+* source:	https://sketchfab.com/3d-models/ksb-worker-a2defc6845a14094b0a86ddf24d18db9
+* author:	edouard77 (https://sketchfab.com/edouard77)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "KSB Worker" (https://sketchfab.com/3d-models/ksb-worker-a2defc6845a14094b0a86ddf24d18db9) by edouard77 (https://sketchfab.com/edouard77) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

@@ -1,0 +1,49 @@
+fileFormatVersion: 2
+guid: 64b1bd5a91367664da40ec8934019ad9
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: 715df9372183c47e389bb6e19fbc3b52, type: 3}
+  editorImportSettings:
+    generateSecondaryUVSet: 0
+  importSettings:
+    nodeNameMethod: 1
+    animationMethod: 2
+    generateMipMaps: 1
+    texturesReadable: 0
+    defaultMinFilterMode: 9729
+    defaultMagFilterMode: 9729
+    anisotropicFilterLevel: 1
+  instantiationSettings:
+    mask: -1
+    layer: 0
+    skinUpdateWhenOffscreen: 1
+    lightIntensityFactor: 1
+    sceneObjectCreation: 2
+  assetDependencies:
+  - type: 0
+    originalUri: Assets\fond\NPC\009_male_worker_welder_00\scene.bin
+    assetPath: Assets\fond\NPC\009_male_worker_welder_00\scene.bin
+  - type: 1
+    originalUri: Assets\fond\NPC\009_male_worker_welder_00\textures\e4a8698b-0028-4620-8ea1-c2f3cda302aa_baseColor.jpeg
+    assetPath: Assets\fond\NPC\009_male_worker_welder_00\textures\e4a8698b-0028-4620-8ea1-c2f3cda302aa_baseColor.jpeg
+  - type: 1
+    originalUri: Assets\fond\NPC\009_male_worker_welder_00\textures\c1c30db9-50f3-4187-b11b-0e0df51aad17_baseColor.png
+    assetPath: Assets\fond\NPC\009_male_worker_welder_00\textures\c1c30db9-50f3-4187-b11b-0e0df51aad17_baseColor.png
+  - type: 1
+    originalUri: Assets\fond\NPC\009_male_worker_welder_00\textures\55862369-82b3-459e-a660-c7c8ded7772e_baseColor.jpeg
+    assetPath: Assets\fond\NPC\009_male_worker_welder_00\textures\55862369-82b3-459e-a660-c7c8ded7772e_baseColor.jpeg
+  - type: 1
+    originalUri: Assets\fond\NPC\009_male_worker_welder_00\textures\43caa9bf-e258-4545-ba6a-9cfc1a2a6b35_baseColor.jpeg
+    assetPath: Assets\fond\NPC\009_male_worker_welder_00\textures\43caa9bf-e258-4545-ba6a-9cfc1a2a6b35_baseColor.jpeg
+  - type: 1
+    originalUri: Assets\fond\NPC\009_male_worker_welder_00\textures\cc5d3ca6-5a69-40cb-a8d0-326f1b4dd6b1_baseColor.jpeg
+    assetPath: Assets\fond\NPC\009_male_worker_welder_00\textures\cc5d3ca6-5a69-40cb-a8d0-326f1b4dd6b1_baseColor.jpeg
+  - type: 1
+    originalUri: Assets\fond\NPC\009_male_worker_welder_00\textures\05dd287b-e129-462f-93eb-164a7739a820_baseColor.jpeg
+    assetPath: Assets\fond\NPC\009_male_worker_welder_00\textures\05dd287b-e129-462f-93eb-164a7739a820_baseColor.jpeg
+  reportItems: []

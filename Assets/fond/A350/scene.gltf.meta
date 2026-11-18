@@ -1,0 +1,94 @@
+fileFormatVersion: 2
+guid: 7b4180cbc4465f4468d647ccd41668f3
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: 715df9372183c47e389bb6e19fbc3b52, type: 3}
+  editorImportSettings:
+    generateSecondaryUVSet: 0
+  importSettings:
+    nodeNameMethod: 1
+    animationMethod: 2
+    generateMipMaps: 1
+    texturesReadable: 0
+    defaultMinFilterMode: 9729
+    defaultMagFilterMode: 9729
+    anisotropicFilterLevel: 1
+  instantiationSettings:
+    mask: -1
+    layer: 0
+    skinUpdateWhenOffscreen: 1
+    lightIntensityFactor: 1
+    sceneObjectCreation: 2
+  assetDependencies:
+  - type: 0
+    originalUri: Assets\fond\A350\scene.bin
+    assetPath: Assets\fond\A350\scene.bin
+  - type: 1
+    originalUri: Assets\fond\A350\textures\Cylinder01-FACES_baseColor.jpeg
+    assetPath: Assets\fond\A350\textures\Cylinder01-FACES_baseColor.jpeg
+  - type: 1
+    originalUri: Assets\fond\A350\textures\Cylinder02-FACES_baseColor.jpeg
+    assetPath: Assets\fond\A350\textures\Cylinder02-FACES_baseColor.jpeg
+  - type: 1
+    originalUri: Assets\fond\A350\textures\Cylinder04-FACES_baseColor.jpeg
+    assetPath: Assets\fond\A350\textures\Cylinder04-FACES_baseColor.jpeg
+  - type: 1
+    originalUri: Assets\fond\A350\textures\Line17-FACES_baseColor.jpeg
+    assetPath: Assets\fond\A350\textures\Line17-FACES_baseColor.jpeg
+  - type: 1
+    originalUri: Assets\fond\A350\textures\Line31-FACES_baseColor.jpeg
+    assetPath: Assets\fond\A350\textures\Line31-FACES_baseColor.jpeg
+  - type: 1
+    originalUri: Assets\fond\A350\textures\Cylinder12-FACES_baseColor.jpeg
+    assetPath: Assets\fond\A350\textures\Cylinder12-FACES_baseColor.jpeg
+  - type: 1
+    originalUri: Assets\fond\A350\textures\Torus06-FACES_baseColor.jpeg
+    assetPath: Assets\fond\A350\textures\Torus06-FACES_baseColor.jpeg
+  - type: 1
+    originalUri: Assets\fond\A350\textures\Object03-FACES_baseColor.jpeg
+    assetPath: Assets\fond\A350\textures\Object03-FACES_baseColor.jpeg
+  - type: 1
+    originalUri: Assets\fond\A350\textures\Object04-FACES_baseColor.jpeg
+    assetPath: Assets\fond\A350\textures\Object04-FACES_baseColor.jpeg
+  - type: 1
+    originalUri: Assets\fond\A350\textures\Box13-FACES_baseColor.jpeg
+    assetPath: Assets\fond\A350\textures\Box13-FACES_baseColor.jpeg
+  - type: 1
+    originalUri: Assets\fond\A350\textures\Line39-FACES_baseColor.jpeg
+    assetPath: Assets\fond\A350\textures\Line39-FACES_baseColor.jpeg
+  - type: 1
+    originalUri: Assets\fond\A350\textures\Box03-FACES_baseColor.jpeg
+    assetPath: Assets\fond\A350\textures\Box03-FACES_baseColor.jpeg
+  - type: 1
+    originalUri: Assets\fond\A350\textures\Cone04-FACES_baseColor.jpeg
+    assetPath: Assets\fond\A350\textures\Cone04-FACES_baseColor.jpeg
+  - type: 1
+    originalUri: Assets\fond\A350\textures\Cone05-FACES_baseColor.jpeg
+    assetPath: Assets\fond\A350\textures\Cone05-FACES_baseColor.jpeg
+  - type: 1
+    originalUri: Assets\fond\A350\textures\Cone06-FACES_baseColor.jpeg
+    assetPath: Assets\fond\A350\textures\Cone06-FACES_baseColor.jpeg
+  - type: 1
+    originalUri: Assets\fond\A350\textures\Box19-FACES_baseColor.jpeg
+    assetPath: Assets\fond\A350\textures\Box19-FACES_baseColor.jpeg
+  - type: 1
+    originalUri: Assets\fond\A350\textures\Cylinder34-FACES_baseColor.jpeg
+    assetPath: Assets\fond\A350\textures\Cylinder34-FACES_baseColor.jpeg
+  - type: 1
+    originalUri: Assets\fond\A350\textures\Box20-FACES_baseColor.jpeg
+    assetPath: Assets\fond\A350\textures\Box20-FACES_baseColor.jpeg
+  - type: 1
+    originalUri: Assets\fond\A350\textures\Box22-FACES_baseColor.jpeg
+    assetPath: Assets\fond\A350\textures\Box22-FACES_baseColor.jpeg
+  - type: 1
+    originalUri: Assets\fond\A350\textures\Cylinder39-FACES_baseColor.jpeg
+    assetPath: Assets\fond\A350\textures\Cylinder39-FACES_baseColor.jpeg
+  - type: 1
+    originalUri: Assets\fond\A350\textures\Line45-FACES_baseColor.jpeg
+    assetPath: Assets\fond\A350\textures\Line45-FACES_baseColor.jpeg
+  reportItems: []
