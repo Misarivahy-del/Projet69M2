@@ -12,8 +12,8 @@ namespace XRMultiplayer
     public class LobbyUI : MonoBehaviour
     {
         /// <summary>
-        ///  The timeout for direct join in seconds. This is the time we wait for a direct join to complete before giving up.
-        ///  This is used to prevent the client from waiting indefinitely if the server is not responding.
+        /// The timeout for direct join in seconds. This is the time we wait for a direct join to complete before giving up.
+        /// This is used to prevent the client from waiting indefinitely if the server is not responding.
         /// </summary>
         const float k_DirectJoinTimeout = 4.5f;
 
@@ -91,9 +91,10 @@ namespace XRMultiplayer
         {
             m_PrivacyToggle.onValueChanged.AddListener(TogglePrivacy);
 
-            bool isLocal = XRINetworkGameManager.CurrentSessionType != SessionType.DistributedAuthority;
-            m_SessionPanelObject.SetActive(!isLocal);
-            m_LocalPanelObject.SetActive(isLocal);
+            // Force l'affichage du panneau local (Host / Join / IP)
+            m_SessionPanelObject.SetActive(false);
+            m_LocalPanelObject.SetActive(true);
+
             m_PlayerCount = XRINetworkGameManager.maxPlayers / 2;
             XRINetworkGameManager.Instance.OnConnectionFailedAction += FailedToConnect;
             XRINetworkGameManager.Instance.OnConnectionUpdated += ConnectedUpdated;
@@ -142,7 +143,7 @@ namespace XRMultiplayer
         /// Set the room name
         /// </summary>
         /// <param name="roomName">The name of the room</param>
-        /// <remarks> This function is called from <see cref="XRIKeyboardDisplay"/>
+        /// <remarks> This function is called from <see cref="XRIKeyboardDisplay"/></remarks>
         public void SetRoomName(string roomName)
         {
             if (!string.IsNullOrEmpty(roomName))
@@ -155,7 +156,7 @@ namespace XRMultiplayer
         /// Join a room by code
         /// </summary>
         /// <param name="roomCode">The room code to join</param>
-        /// <remarks> This function is called from <see cref="XRIKeyboardDisplay"/>
+        /// <remarks> This function is called from <see cref="XRIKeyboardDisplay"/></remarks>
         public void EnterRoomCode(string roomCode)
         {
             ToggleConnectionSubPanel(ConnectionSubPanel.ConnectionPanel);
@@ -219,7 +220,6 @@ namespace XRMultiplayer
             {
                 m_ConnectionSubPanels[i].SetActive(i == panelId);
             }
-
 
             if (panelId == 0)
             {
@@ -298,7 +298,7 @@ namespace XRMultiplayer
             if (m_CooldownFillRoutine != null) StopCoroutine(m_CooldownFillRoutine);
             m_CooldownFillRoutine = StartCoroutine(UpdateButtonCooldown());
 
-            await System.Threading.Tasks.Task.Yield(); // Wait for the end of the frame
+            await System.Threading.Tasks.Task.Yield();
             if (XRINetworkGameManager.CurrentSessionType == SessionType.LocalOnly)
                 return;
 
@@ -334,6 +334,13 @@ namespace XRMultiplayer
 
         public void HostLocalRoom()
         {
+            // Si StartSimuMulti a déjà lancé le Host local au démarrage, on valide directement
+            if (NetworkManager.Singleton != null && NetworkManager.Singleton.IsHost)
+            {
+                ToggleConnectionSubPanel(ConnectionSubPanel.ConnectionSuccessPanel);
+                return;
+            }
+
             if (XRINetworkGameManager.Instance.HostLocalConnection())
             {
                 ToggleConnectionSubPanel(ConnectionSubPanel.ConnectionSuccessPanel);
@@ -348,10 +355,24 @@ namespace XRMultiplayer
 
         public void JoinLocalRoom()
         {
+            StartCoroutine(SwitchToLocalClientRoutine());
+        }
+
+        private IEnumerator SwitchToLocalClientRoutine()
+        {
+            ToggleConnectionSubPanel(ConnectionSubPanel.ConnectionPanel);
+
+            // Coupe proprement la session Host solo démarrée par StartSimuMulti avant de rejoindre en Client
+            if (NetworkManager.Singleton != null && NetworkManager.Singleton.IsListening)
+            {
+                NetworkManager.Singleton.Shutdown();
+                yield return new WaitWhile(() => NetworkManager.Singleton.ShutdownInProgress);
+                yield return null;
+            }
+
             if (XRINetworkGameManager.Instance.JoinLocalConnection())
             {
                 StartCoroutine(CheckForFailedConnection());
-                ToggleConnectionSubPanel(ConnectionSubPanel.ConnectionPanel);
             }
             else
             {
@@ -390,13 +411,12 @@ namespace XRMultiplayer
         }
 
         /// <summary>
-        ///  Asynchronously sets the IP address for joining a direct connection.
-        ///  This method validates the IP address format and resolves it to ensure it's valid.
+        /// Asynchronously sets the IP address for joining a direct connection.
+        /// This method validates the IP address format and resolves it to ensure it's valid.
         /// </summary>
         /// <param name="address">IP address or DNS</param>
         public virtual async void SetIPAsync(string address)
         {
-            // Validate the IP address format
             var hostEntry = await System.Net.Dns.GetHostEntryAsync(address);
             if (hostEntry == null || hostEntry.AddressList.Length == 0)
             {
@@ -406,13 +426,12 @@ namespace XRMultiplayer
                 return;
             }
 
-            // If multiple addresses are found, log a warning as we only use the first one
             if (hostEntry.AddressList.Length > 1)
                 Utils.LogWarning($"Multiple IP addresses found for {address}. Using the first one: {hostEntry.AddressList[0]}");
 
             var ipAddress = hostEntry.AddressList[0].ToString();
             var transport = (UnityTransport)NetworkManager.Singleton.NetworkConfig.NetworkTransport;
-            transport.SetConnectionData(ipAddress, transport.ConnectionData.Port); // Assuming default port is 7777, change as needed
+            transport.SetConnectionData(ipAddress, transport.ConnectionData.Port);
         }
 
         /// <summary>

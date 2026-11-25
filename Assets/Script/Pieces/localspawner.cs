@@ -41,8 +41,15 @@ public class NetworkInteractableSpawner : NetworkBehaviour
 
     private void Update()
     {
-        // Seul le serveur gère le spawn et le compteur
-        if (!IsServer) return;
+        // Bloque l'exécution sur les clients et pendant les transitions réseau
+        if (NetworkManager.Singleton == null ||
+            !NetworkManager.Singleton.IsServer ||
+            !NetworkManager.Singleton.IsListening ||
+            NetworkManager.Singleton.ShutdownInProgress ||
+            !IsSpawned)
+        {
+            return;
+        }
 
         if (currentObject != null)
         {
@@ -86,23 +93,23 @@ public class NetworkInteractableSpawner : NetworkBehaviour
 
     private void SpawnObject()
     {
+        if (NetworkManager.Singleton == null || !NetworkManager.Singleton.IsServer || !IsSpawned)
+            return;
+
         spawnCooldownTimer = spawnCooldown;
 
-        // 1. Instanciation locale sur le serveur
         currentObject = Instantiate(
             spawnPrefab,
             SpawnPoint.position,
             SpawnPoint.rotation
         );
 
-        // 2. Réplication de l'objet sur tout le réseau
         NetworkObject netObj = currentObject.GetComponent<NetworkObject>();
         netObj.Spawn();
 
-        // 3. Applique la taille réduite et le gel physique chez tout le monde
         if (currentObject.TryGetComponent(out NetworkSpawnedItem item))
         {
-            item.InitializeSpawnStateRpc(multiplierscale, freezeOnSpawn);
+            item.ConfigureOnServer(multiplierscale, freezeOnSpawn);
         }
     }
 }

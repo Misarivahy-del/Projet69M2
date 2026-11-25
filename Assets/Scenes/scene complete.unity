@@ -728,13 +728,13 @@ PrefabInstance:
     - target: {fileID: 874452183138526564, guid: 3967f87296c892e40b57e37bc8601550,
         type: 3}
       propertyPath: m_NetworkConfig.Prefabs.NetworkPrefabsLists.Array.size
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 874452183138526564, guid: 3967f87296c892e40b57e37bc8601550,
         type: 3}
       propertyPath: 'm_NetworkConfig.Prefabs.NetworkPrefabsLists.Array.data[4]'
       value: 
-      objectReference: {fileID: 11400000, guid: a4390c5271cb1294ba726e4409e1ec04,
+      objectReference: {fileID: 11400000, guid: 8143ffccdbbaa6b458484d62cde50b8b,
         type: 2}
     - target: {fileID: 4145292139985048678, guid: 3967f87296c892e40b57e37bc8601550,
         type: 3}
@@ -985,6 +985,11 @@ PrefabInstance:
       propertyPath: pcMenuCamera
       value: 
       objectReference: {fileID: 127384353}
+    - target: {fileID: 2808410049059023866, guid: 0267a1d338db2bf4c9625e450bbaaad0,
+        type: 3}
+      propertyPath: m_SessionType
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2808410049059023866, guid: 0267a1d338db2bf4c9625e450bbaaad0,
         type: 3}
       propertyPath: pcObserverPrefab
@@ -7337,8 +7342,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1528365802}
-  - component: {fileID: 1528365801}
   - component: {fileID: 1528365803}
+  - component: {fileID: 1528365801}
   m_Layer: 0
   m_Name: ouverture porte
   m_TagString: Untagged
