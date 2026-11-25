@@ -10,8 +10,8 @@ public class NetworkSpawnedItem : NetworkBehaviour
     private RigidbodyConstraints originalConstraints;
     private Rigidbody rb;
     private XRGrabInteractable grabInteractable;
+    private bool grabbedLocally = false;
 
-    // Synchronisé automatiquement, même pour les joueurs qui rejoignent en retard
     private NetworkVariable<float> netScaleMultiplier = new NetworkVariable<float>(1f);
     private NetworkVariable<bool> netIsFrozen = new NetworkVariable<bool>(false);
     private NetworkVariable<bool> netIsGrabbedOnce = new NetworkVariable<bool>(false);
@@ -20,6 +20,9 @@ public class NetworkSpawnedItem : NetworkBehaviour
     {
         rb = GetComponent<Rigidbody>();
         grabInteractable = GetComponent<XRGrabInteractable>();
+
+        // Empêche XRGrabInteractable de mémoriser et réappliquer l'échelle réduite du spawner
+        grabInteractable.trackScale = false;
 
         originalScale = transform.localScale;
         if (rb != null)
@@ -42,7 +45,11 @@ public class NetworkSpawnedItem : NetworkBehaviour
         grabInteractable.selectEntered.RemoveListener(OnLocalGrabbed);
     }
 
-    // Appelé côté serveur par NetworkInteractableSpawner juste après netObj.Spawn()
+    protected override void OnOwnershipChanged(ulong previous, ulong current)
+    {
+        ApplyVisualAndPhysicsState();
+    }
+
     public void ConfigureOnServer(float scaleMultiplier, bool freeze)
     {
         if (!IsServer) return;
@@ -55,9 +62,12 @@ public class NetworkSpawnedItem : NetworkBehaviour
 
     private void ApplyVisualAndPhysicsState()
     {
-        if (netIsGrabbedOnce.Value)
+        if (netIsGrabbedOnce.Value || grabbedLocally)
         {
-            transform.localScale = originalScale;
+            // Ne modifie plus localScale si la pièce est déjà parentée à un support
+            if (transform.parent == null)
+                transform.localScale = originalScale;
+
             if (rb != null)
             {
                 rb.constraints = originalConstraints;
@@ -76,23 +86,37 @@ public class NetworkSpawnedItem : NetworkBehaviour
 
     private void OnLocalGrabbed(SelectEnterEventArgs args)
     {
-        if (!IsSpawned || netIsGrabbedOnce.Value) return;
+        if (!IsSpawned) return;
 
-        RequestGrabServerRpc(NetworkManager.Singleton.LocalClientId);
+        grabbedLocally = true;
+        if (transform.parent == null)
+            transform.localScale = originalScale;
+
+        if (rb != null)
+        {
+            rb.constraints = originalConstraints;
+            rb.isKinematic = false;
+        }
+
+        if (!netIsGrabbedOnce.Value)
+        {
+            RequestGrabServerRpc(NetworkManager.Singleton.LocalClientId);
+        }
     }
 
     [Rpc(SendTo.Server)]
     private void RequestGrabServerRpc(ulong clientId)
     {
-        if (netIsGrabbedOnce.Value) return;
-
         if (NetworkObject.OwnerClientId != clientId)
         {
             NetworkObject.ChangeOwnership(clientId);
         }
 
-        netIsGrabbedOnce.Value = true;
-        netIsFrozen.Value = false;
-        netScaleMultiplier.Value = 1f;
+        if (!netIsGrabbedOnce.Value)
+        {
+            netIsGrabbedOnce.Value = true;
+            netIsFrozen.Value = false;
+            netScaleMultiplier.Value = 1f;
+        }
     }
 }
