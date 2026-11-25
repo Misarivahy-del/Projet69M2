@@ -7,9 +7,11 @@ public class SoloSessionStarter : MonoBehaviour
 
     private void Start()
     {
+
         // Lance automatiquement le mode Host en solo pour activer les NetworkBehaviour
         if (isSoloMode && !NetworkManager.Singleton.IsListening)
         {
+            Debug.Log("lancement du hostlocal");
             NetworkManager.Singleton.StartHost();
         }
     }

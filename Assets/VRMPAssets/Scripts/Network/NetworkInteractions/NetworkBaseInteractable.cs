@@ -16,21 +16,13 @@ using UnityEditor;
 namespace XRMultiplayer
 {
     /// <summary>
-    /// NetworkInteractableBase class synchronizes the <see cref=XRBaseInteractable"/> events over the network.
-    /// Options are exposed to determine which functionality you want to syncrhonize.
+    /// NetworkInteractableBase class synchronizes the <see cref="XRBaseInteractable"/> events over the network.
+    /// Options are exposed to determine which functionality you want to synchronize.
     /// </summary>
-    /// <remarks>
-    /// This is meant to be a parent class that handles the core networking functionality.
-    /// Classes can interhit from this class and override where applicable.
-    /// See <see cref=NetworkPhysicsInteractable"/> for an example of how to extend this class.
-    /// </remarks>
     [RequireComponent(typeof(XRBaseInteractable))]
     [DisallowMultipleComponent]
     public class NetworkBaseInteractable : NetworkBehaviour, IXRSelectFilter, IXRHoverFilter
     {
-        /// <summary>
-        /// Allow users to take ownership of currently controlled objects.
-        /// </summary>
         public bool allowOverrideOwnership
         {
             get => m_AllowOverrideOwnership;
@@ -40,9 +32,6 @@ namespace XRMultiplayer
         [Header("General Options"), SerializeField, Tooltip("Allow users to take ownership of currently controlled objects")]
         protected bool m_AllowOverrideOwnership = false;
 
-        /// <summary>
-        /// Amount of time before checking for false positives for the object interaction state
-        /// </summary>
         public float interactionCheckTime
         {
             get => m_InteractionCheckTime;
@@ -51,9 +40,6 @@ namespace XRMultiplayer
         [SerializeField, Tooltip("Amount of time before checking for false positives of the object interaction state.")]
         protected float m_InteractionCheckTime = 2.0f;
 
-        /// <summary>
-        /// Ignore Socket Interaction
-        /// </summary>
         public bool ignoreSocketSelectedCallback
         {
             get => m_IgnoreSocketSelectedCallback;
@@ -62,9 +48,6 @@ namespace XRMultiplayer
         [SerializeField, Tooltip("Ignore Socket Interaction")]
         protected bool m_IgnoreSocketSelectedCallback = true;
 
-        /// <summary>
-        /// Resets the object position, scale, and rotation on disconnect.
-        /// </summary>
         public bool resetObjectOnDisconenct
         {
             get => m_ResetObjectOnDisconnect;
@@ -73,9 +56,6 @@ namespace XRMultiplayer
         [SerializeField, Tooltip("Reset object on disconnect")]
         protected bool m_ResetObjectOnDisconnect = true;
 
-        /// <summary>
-        /// Amount of time before relinquishing ownership of the object back to the host.
-        /// </summary>
         public bool relinquishOwnershipAfterTime
         {
             get => m_RelinquishOwnershipAfterTime;
@@ -84,9 +64,6 @@ namespace XRMultiplayer
         [Header("Ownership Relinquish"), SerializeField, Tooltip("Should we relinquish ownership back to the room host after a set amount of time?")]
         protected bool m_RelinquishOwnershipAfterTime = true;
 
-        /// <summary>
-        /// Amount of time before relinquishing ownership of the object back to the host.
-        /// </summary>
         public float relinquishOwnershipTime
         {
             get => m_RelinquishOwnershipTime;
@@ -95,32 +72,19 @@ namespace XRMultiplayer
         [SerializeField, Tooltip("Amount of time before relinquishing ownership of the object back to the host.")]
         protected float m_RelinquishOwnershipTime = 5.0f;
 
-        /// <summary>
-        /// Gets the current state of an object being interacted over the network.
-        /// </summary>
         public bool isInteracting
         {
             get => m_IsInteracting.Value;
         }
-        /// <summary>
-        /// Syncs the current state of being interacted with or not.
-        /// Prevents users from taking control of currently controlled objects, unless <see cref="allowOverrideOwnership"/> is true.
-        /// </summary>
-        /// <remarks>
-        /// <see cref="allowOverrideOwnership"/> will allow users to bypass this value and take ownership from other players.
-        /// </remarks>
+
         protected NetworkVariable<bool> m_IsInteracting = new(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
         [HideInInspector, SerializeField, Tooltip("Use a Unity Event for a callback when the IsInteracting value changes.")]
 
-        //Disabling warning for unused variable since it's used in the editor script
 #pragma warning disable 0414
         bool m_UseInteractingChangedEvent = false;
 #pragma warning restore 0414
         [HideInInspector] public UnityEvent<bool> OnInteractingChanged;
 
-        /// <summary>
-        /// Sync Hover interaction over network.
-        /// </summary>
         public bool syncHover
         {
             get => m_SyncHover;
@@ -133,9 +97,6 @@ namespace XRMultiplayer
         [HideInInspector] public UnityEvent<bool> HoverNetworkedEventServer;
         [HideInInspector] public UnityEvent<bool> HoverNetworkedEventAll;
 
-        /// <summary>
-        /// Sync Select interaction over network.
-        /// </summary>
         public bool syncSelect
         {
             get => m_SyncSelect;
@@ -148,9 +109,6 @@ namespace XRMultiplayer
         [HideInInspector] public UnityEvent<bool> SelectNetworkedEventServer;
         [HideInInspector] public UnityEvent<bool> SelectNetworkedEventAll;
 
-        /// <summary>
-        /// Sync Activate interaction over network.
-        /// </summary>
         public bool syncActivate
         {
             get => m_SyncActivate;
@@ -163,9 +121,6 @@ namespace XRMultiplayer
         [HideInInspector] public UnityEvent<bool> ActivateNetworkedEventServer;
         [HideInInspector] public UnityEvent<bool> ActivateNetworkedEventAll;
 
-        /// <summary>
-        /// Base Interactable used for syncing events.
-        /// </summary>
         public XRBaseInteractable baseInteractable
         {
             get => m_BaseInteractable;
@@ -175,44 +130,24 @@ namespace XRMultiplayer
 
         public bool canProcess => isActiveAndEnabled;
 
-        /// <summary>
-        /// Starting Pose for the object transform.
-        /// </summary>
         protected Pose m_OriginalPose;
-
-        /// <summary>
-        /// Starting scale for the object transform.
-        /// </summary>
         protected Vector3 m_OriginalScale;
-
         protected XRInteractionManager m_InteractionManager;
 
-#pragma warning disable CS0618 // Type or member is obsolete
+#pragma warning disable CS0618
         protected BaseAffordanceStateProvider m_AffordanceStateProvider;
-#pragma warning restore CS0618 // Type or member is obsolete
+#pragma warning restore CS0618
 
 #if UNITY_EDITOR
-        /// <summary>
-        /// Foldout states for the editor.
-        /// </summary>
         [HideInInspector, SerializeField]
-        bool[] m_FoldoutValues = {true, true, true};
+        bool[] m_FoldoutValues = { true, true, true };
 #endif
 
-        /// <summary>
-        /// After a set amount of time, relinquish ownership of the object back to the host.
-        /// </summary>
         IEnumerator m_RelinquishToHostEnumerator;
-
-        /// <summary>
-        /// Check for false positives of the object being interacted with.
-        /// </summary>
         IEnumerator m_HostInteractionCheckEnumerator;
 
-        /// <inheritdoc/>
         public virtual void Awake()
         {
-            // Get associated components
             if (!TryGetComponent(out m_BaseInteractable))
             {
                 Utils.Log("Missing Components! Disabling Now.", 2);
@@ -225,15 +160,13 @@ namespace XRMultiplayer
 
             m_InteractionManager = FindFirstObjectByType<XRInteractionManager>();
 
-#pragma warning disable CS0618 // Type or member is obsolete
+#pragma warning disable CS0618
             m_AffordanceStateProvider = GetComponentInChildren<BaseAffordanceStateProvider>();
-#pragma warning restore CS0618 // Type or member is obsolete
+#pragma warning restore CS0618
         }
 
-        /// <inheritdoc/>
         private void OnEnable()
         {
-            // Set initial pose and scale
             m_OriginalPose.position = transform.position;
             m_OriginalPose.rotation = transform.rotation;
             m_OriginalScale = transform.localScale;
@@ -241,25 +174,17 @@ namespace XRMultiplayer
             SetupListeners(true);
         }
 
-        /// <inheritdoc/>
         private void OnDisable()
         {
             SetupListeners(false);
         }
 
-        /// <summary>
-        /// Handles the listeners for the interactable events.
-        /// </summary>
-        /// <param name="setup">
-        /// Whether or not we are adding or removing the listeners.
-        /// </param>
         void SetupListeners(bool setup)
         {
             if (setup)
             {
                 if (baseInteractable != null)
                 {
-                    // Add all the listeners for interactable events
                     baseInteractable.hoverEntered.AddListener(OnHoverEnterLocal);
                     baseInteractable.hoverExited.AddListener(OnHoverExitLocal);
                     baseInteractable.selectEntered.AddListener(OnSelectEnteredLocal);
@@ -272,7 +197,6 @@ namespace XRMultiplayer
             {
                 if (baseInteractable != null)
                 {
-                    // Removes listeners from the interactable events
                     baseInteractable.hoverEntered.RemoveListener(OnHoverEnterLocal);
                     baseInteractable.hoverExited.RemoveListener(OnHoverExitLocal);
                     baseInteractable.selectEntered.RemoveListener(OnSelectEnteredLocal);
@@ -283,7 +207,15 @@ namespace XRMultiplayer
             }
         }
 
-        /// <inheritdoc/>
+        private void SetOwnershipLockSafe(bool locked)
+        {
+            if (NetworkManager.Singleton != null &&
+                NetworkManager.Singleton.NetworkConfig.NetworkTopology == NetworkTopologyTypes.DistributedAuthority)
+            {
+                NetworkObject.SetOwnershipLock(locked);
+            }
+        }
+
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();
@@ -297,7 +229,6 @@ namespace XRMultiplayer
                 ResetObject();
         }
 
-        /// <inheritdoc/>
         public override void OnNetworkDespawn()
         {
             base.OnNetworkDespawn();
@@ -310,21 +241,16 @@ namespace XRMultiplayer
                 ResetObject();
         }
 
-        /// <summary>
-        /// Resets the object position, scale, and rotation based on the original pose determined in <see cref="OnEnable"/>
-        /// </summary>
         public virtual void ResetObject()
         {
             transform.SetPositionAndRotation(m_OriginalPose.position, m_OriginalPose.rotation);
             transform.localScale = m_OriginalScale;
         }
 
-        /// <summary>
-        /// Callback for the Hover Enter event executed for the local user.
-        /// </summary>
-        /// <param name="args"></param>
         public virtual void OnHoverEnterLocal(BaseInteractionEventArgs args)
         {
+            if (!IsSpawned) return;
+
             if (m_IgnoreSocketSelectedCallback && args.interactorObject.transform.GetComponent<XRSocketInteractor>() != null)
                 return;
 
@@ -333,22 +259,15 @@ namespace XRMultiplayer
                 OnHoverOwnerRpc(true, NetworkManager.Singleton.LocalClientId);
         }
 
-        /// <summary>
-        /// Callback for the Hover Exit event executed for the local user.
-        /// </summary>
-        /// <param name="args"></param>
         public virtual void OnHoverExitLocal(BaseInteractionEventArgs args)
         {
+            if (!IsSpawned) return;
+
             Hovered(false);
             if (syncHover)
                 OnHoverOwnerRpc(false, NetworkManager.Singleton.LocalClientId);
         }
 
-        /// <summary>
-        /// Hover event executed on the Server.
-        /// </summary>
-        /// <param name="entered">True if hover entered, False if hover exited.</param>
-        /// <param name="clientId">ClientId who sent the RPC.</param>
         [Rpc(SendTo.Owner)]
         public virtual void OnHoverOwnerRpc(bool entered, ulong clientId)
         {
@@ -357,11 +276,6 @@ namespace XRMultiplayer
                 HoverNetworkedEventServer.Invoke(entered);
         }
 
-        /// <summary>
-        /// Hover event executed on all clients.
-        /// </summary>
-        /// <param name="entered">True if hover entered, False if hover exited.</param>
-        /// <param name="clientId">ClientId who sent the RPC.</param>
         [Rpc(SendTo.Everyone)]
         public virtual void OnHoverRpc(bool entered, ulong clientId)
         {
@@ -369,30 +283,22 @@ namespace XRMultiplayer
             {
                 Hovered(entered);
 
-#pragma warning disable CS0618 // Type or member is obsolete
+#pragma warning disable CS0618
                 m_AffordanceStateProvider?.UpdateAffordanceState(new AffordanceStateData(Convert.ToByte(entered ? 2 : (isInteracting ? 4 : 0)), 1.0f));
-#pragma warning restore CS0618 // Type or member is obsolete
+#pragma warning restore CS0618
             }
         }
 
-        /// <summary>
-        /// This function gets called immediately for the local user,
-        /// and gets called remotely from the server on all clients.
-        /// </summary>
-        /// <param name="entered">True if hover entered, False if hover exited.</param>
         public virtual void Hovered(bool entered)
         {
             if (m_UseHoverEvents)
                 HoverNetworkedEventAll.Invoke(entered);
         }
 
-        /// <summary>
-        /// Callback for the Select Enter event executed for the local user.
-        /// </summary>
-        /// <param name="args"></param>
         public virtual void OnSelectEnteredLocal(BaseInteractionEventArgs args)
         {
-            // Return out early if the interactor is ignoring sockets or not syncing select.
+            if (!IsSpawned) return;
+
             if (m_IgnoreSocketSelectedCallback && args.interactorObject.transform.GetComponent<XRSocketInteractor>() != null)
                 return;
 
@@ -400,47 +306,54 @@ namespace XRMultiplayer
             {
                 Selected(true);
                 if (syncSelect)
-                    OnSelectOwnerRpc(true, NetworkManager.Singleton.LocalClientId);
+                {
+                    if (NetworkManager.NetworkConfig.NetworkTopology == NetworkTopologyTypes.ClientServer)
+                        OnSelectServerRpc(true, NetworkManager.Singleton.LocalClientId);
+                    else
+                        OnSelectOwnerRpc(true, NetworkManager.Singleton.LocalClientId);
+                }
 
-                // If already the owner, set the network variable for isHeld
                 if (IsOwner)
                 {
                     m_IsInteracting.Value = true;
-                    NetworkObject.SetOwnershipLock(true);
+                    SetOwnershipLockSafe(true);
                 }
             }
         }
 
-        /// <summary>
-        /// Callback for the Select Exit event executed for the local user.
-        /// </summary>
-        /// <param name="args"></param>
         public virtual void OnSelectExitedLocal(BaseInteractionEventArgs args)
         {
-            // Return out early if the interactor is ignoring sockets or not syncing select.
+            if (!IsSpawned) return;
+
             if (m_IgnoreSocketSelectedCallback && args.interactorObject.transform.GetComponent<XRSocketInteractor>() != null)
                 return;
 
-            // Check if still holding with other hand.
             if (m_BaseInteractable.isSelected)
-                return;
-
-            // Check that it is still a spawned object. Select will fire on object destruction.
-            if (!IsSpawned)
                 return;
 
             Selected(false);
 
             if (syncSelect)
-                OnSelectOwnerRpc(false, NetworkManager.Singleton.LocalClientId);
+            {
+                if (NetworkManager.NetworkConfig.NetworkTopology == NetworkTopologyTypes.ClientServer)
+                    OnSelectServerRpc(false, NetworkManager.Singleton.LocalClientId);
+                else
+                    OnSelectOwnerRpc(false, NetworkManager.Singleton.LocalClientId);
+            }
 
-            // If still the owner, set the network variable for isHeld
             if (IsOwner)
             {
                 m_IsInteracting.Value = false;
-                NetworkObject.SetOwnershipLock(false);
+                SetOwnershipLockSafe(false);
                 RelinquishOwnershipAfterTime();
             }
+        }
+
+        [Rpc(SendTo.Server)]
+        void ResetObjectToServerRpc()
+        {
+            if (NetworkObject.OwnerClientId != NetworkManager.ServerClientId)
+                NetworkObject.ChangeOwnership(NetworkManager.ServerClientId);
         }
 
         [Rpc(SendTo.Owner)]
@@ -450,31 +363,33 @@ namespace XRMultiplayer
                 NetworkObject.ChangeOwnership(NetworkManager.Singleton.CurrentSessionOwner);
         }
 
-        /// <summary>
-        /// Select event executed on the Server.
-        /// </summary>
-        /// <param name="selected">True if select entered, False if select exited.</param>
-        /// <param name="clientId">ClientId who sent the RPC.</param>
-        [Rpc(SendTo.Owner)]
-        public virtual void OnSelectOwnerRpc(bool selected, ulong clientId)
+        [Rpc(SendTo.Server)]
+        public virtual void OnSelectServerRpc(bool selected, ulong clientId)
         {
             OnSelectRpc(selected, clientId);
 
-            // If we are not the owner and we are selecting the object, request to change ownership
             if (selected && OwnerClientId != clientId)
             {
-                NetworkObject.SetOwnershipLock(false);
                 NetworkObject.ChangeOwnership(clientId);
             }
 
             SelectNetworkedEventServer.Invoke(selected);
         }
 
-        /// <summary>
-        /// Select event executed on all clients.
-        /// </summary>
-        /// <param name="selected">True if select entered, False if select exited.</param>
-        /// <param name="clientId">ClientId who sent the RPC.</param>
+        [Rpc(SendTo.Owner)]
+        public virtual void OnSelectOwnerRpc(bool selected, ulong clientId)
+        {
+            OnSelectRpc(selected, clientId);
+
+            if (selected && OwnerClientId != clientId)
+            {
+                SetOwnershipLockSafe(false);
+                NetworkObject.ChangeOwnership(clientId);
+            }
+
+            SelectNetworkedEventServer.Invoke(selected);
+        }
+
         [Rpc(SendTo.Everyone)]
         public virtual void OnSelectRpc(bool selected, ulong clientId)
         {
@@ -482,44 +397,26 @@ namespace XRMultiplayer
                 Selected(selected);
         }
 
-        /// <summary>
-        /// This function gets called immediately for the local user,
-        /// and gets called remotely from the server on all clients.
-        /// </summary>
-        /// <param name="selected">Whether or not selected was called.</param>
         public virtual void Selected(bool selected) { }
 
-        /// <summary>
-        /// Callback for the Activate event executed for the local user.
-        /// </summary>
-        /// <param name="args"></param>
         public virtual void OnActivateLocal(BaseInteractionEventArgs args)
         {
-            if (!IsOwner) return;
+            if (!IsSpawned || !IsOwner) return;
 
             Activated(true);
             if (syncActivate)
                 OnActivateOwnerRpc(true, NetworkManager.Singleton.LocalClientId);
         }
 
-        /// <summary>
-        /// Callback for the Deactivate event executed for the local user.
-        /// </summary>
-        /// <param name="args"></param>
         public virtual void OnDeactivateLocal(BaseInteractionEventArgs args)
         {
-            if (!IsOwner) return;
+            if (!IsSpawned || !IsOwner) return;
 
             Activated(false);
             if (syncActivate)
                 OnActivateOwnerRpc(false, NetworkManager.Singleton.LocalClientId);
         }
 
-        /// <summary>
-        /// Activate event executed on the Server.
-        /// </summary>
-        /// <param name="activate">True if activated, False if Deactivated.</param>
-        /// <param name="clientId">ClientId who sent the RPC.</param>
         [Rpc(SendTo.Owner)]
         public virtual void OnActivateOwnerRpc(bool activate, ulong clientId)
         {
@@ -528,56 +425,36 @@ namespace XRMultiplayer
                 ActivateNetworkedEventServer.Invoke(activate);
         }
 
-        /// <summary>
-        /// Activate event executed on all clients.
-        /// </summary>
-        /// <param name="activate">True if activated, False if Deactivated.</param>
-        /// <param name="clientId">ClientId who sent the RPC.</param>
         [Rpc(SendTo.Everyone)]
         public virtual void OnActivateRpc(bool activate, ulong clientId)
         {
             if (clientId != NetworkManager.Singleton.LocalClientId)
             {
                 Activated(activate);
-#pragma warning disable CS0618 // Type or member is obsolete
+#pragma warning disable CS0618
                 m_AffordanceStateProvider?.UpdateAffordanceState(new AffordanceStateData(Convert.ToByte(activate ? 5 : isInteracting ? 4 : 0), 1.0f));
-#pragma warning restore CS0618 // Type or member is obsolete
+#pragma warning restore CS0618
             }
         }
 
-        /// <summary>
-        /// This function gets called immediately for the local user,
-        /// and gets called remotely from the server on all clients.
-        /// </summary>
-        /// <param name="activate">True if activated, False if Deactivated.</param>
         public virtual void Activated(bool activate)
         {
             if (m_UseActivateEvents)
                 ActivateNetworkedEventAll.Invoke(activate);
         }
 
-        /// <summary>
-        /// Checks if another user can hold or pickup an interactable.
-        /// </summary>
-        /// <returns></returns>
         protected virtual bool CanHold()
         {
             return !isInteracting || allowOverrideOwnership;
         }
 
-        /// <summary>
-        /// See <see cref="NetworkBehaviour"/>.
-        /// </summary>
         public override void OnGainedOwnership()
         {
             base.OnGainedOwnership();
 
-            // Check for gaining ownership of an object when a player disconnects
             if (IsOwner && isInteracting && !baseInteractable.isSelected)
                 m_IsInteracting.Value = false;
 
-            // Workaround for NGO calling this always on Server, even if Server is not owner.
-            // So we check IsOwner and Interactable selected state, and loop through to check for sockets.
             if (IsOwner)
             {
                 if (m_HostInteractionCheckEnumerator != null)
@@ -597,18 +474,14 @@ namespace XRMultiplayer
                     }
                 }
 
-                NetworkObject.SetOwnershipLock(m_IsInteracting.Value);
+                SetOwnershipLockSafe(m_IsInteracting.Value);
             }
         }
 
-        /// <summary>
-        /// See <see cref="NetworkBehaviour"/>.
-        /// </summary>
         public override void OnLostOwnership()
         {
             base.OnLostOwnership();
 
-            // Have to check ownership since this is always called on the Server
             if (!IsOwner)
             {
                 if (m_HostInteractionCheckEnumerator != null)
@@ -619,13 +492,9 @@ namespace XRMultiplayer
 
                 if (baseInteractable.isSelected)
                     m_InteractionManager.CancelInteractableSelection((IXRSelectInteractable)baseInteractable);
-
             }
         }
 
-        /// <summary>
-        /// Checks every <see cref="interactionCheckTime"/> for false positives of the object being interacted with.
-        /// </summary>
         IEnumerator CheckForOwnerInteraction()
         {
             while (IsOwner)
@@ -642,9 +511,6 @@ namespace XRMultiplayer
             }
         }
 
-        /// <summary>
-        /// Checks if the object is selected by a socket.
-        /// </summary>
         bool IsSelectedBySocket()
         {
             if (baseInteractable.isSelected)
@@ -660,29 +526,20 @@ namespace XRMultiplayer
             return false;
         }
 
-        /// <summary>
-        /// Callback for anytime the <see cref="m_IsInteracting"/> value changes.
-        /// </summary>
-        /// <param name="oldValue"></param>
-        /// <param name="newValue"></param>
         protected virtual void OnIsInteractingChanged(bool oldValue, bool newValue)
         {
             OnInteractingChanged.Invoke(newValue);
 
-#pragma warning disable CS0618 // Type or member is obsolete
+#pragma warning disable CS0618
             m_AffordanceStateProvider?.UpdateAffordanceState(new AffordanceStateData(Convert.ToByte(newValue ? 4 : 0), 1.0f));
-#pragma warning restore CS0618 // Type or member is obsolete
+#pragma warning restore CS0618
 
             SelectNetworkedEventAll.Invoke(newValue);
 
-            // If we are interacting and the owner, stop the coroutine to relinquish ownership
             if (newValue && IsOwner && m_RelinquishToHostEnumerator != null)
                 StopCoroutine(m_RelinquishToHostEnumerator);
         }
 
-        /// <summary>
-        /// Relinquish ownership of the object back to the host after a set amount of time.
-        /// </summary>
         protected void RelinquishOwnershipAfterTime()
         {
             if (!m_RelinquishOwnershipAfterTime) return;
@@ -692,33 +549,28 @@ namespace XRMultiplayer
             StartCoroutine(m_RelinquishToHostEnumerator);
         }
 
-        /// <summary>
-        /// Coroutine to relinquish ownership of the object back to the host after a set amount of time.
-        /// </summary>
         IEnumerator RelinquishOwnershipToHost()
         {
             yield return new WaitForSeconds(relinquishOwnershipTime);
-            if (!IsOwner && !baseInteractable.isSelected)
-                ResetObjectToSessionOwnerRpc();
+            if (!baseInteractable.isSelected)
+            {
+                if (NetworkManager.Singleton != null &&
+                    NetworkManager.NetworkConfig.NetworkTopology == NetworkTopologyTypes.ClientServer)
+                {
+                    ResetObjectToServerRpc();
+                }
+                else if (!IsOwner)
+                {
+                    ResetObjectToSessionOwnerRpc();
+                }
+            }
         }
 
-        /// <summary>
-        /// Process the select filter.
-        /// </summary>
-        /// <param name="interactor">Interactor being used to process the Select.</param>
-        /// <param name="interactable"></param>
-        /// <returns></returns>
         public bool Process(IXRSelectInteractor interactor, IXRSelectInteractable interactable)
         {
             return IsOwner || allowOverrideOwnership || (!IsOwner & !isInteracting);
         }
 
-        /// <summary>
-        /// Process the hover filter.
-        /// </summary>
-        /// <param name="interactor">Interactor being used to process the Hover.</param>
-        /// <param name="interactable"></param>
-        /// <returns></returns>
         public bool Process(IXRHoverInteractor interactor, IXRHoverInteractable interactable)
         {
             return IsOwner || allowOverrideOwnership || (!IsOwner & !isInteracting);
@@ -726,13 +578,9 @@ namespace XRMultiplayer
     }
 
 #if UNITY_EDITOR
-    /// <summary>
-    /// Custom Editor for the <see cref="NetworkBaseInteractable"/> class.
-    /// </summary>
     [CustomEditor(typeof(NetworkBaseInteractable), true), CanEditMultipleObjects]
     public class NetworkBaseInteractableEditor : Editor
     {
-        // Serialized properties
         SerializedProperty m_UseInteractingChangedEvent;
         SerializedProperty m_InteractingChangedEvent;
         SerializedProperty m_SyncHover;
@@ -749,10 +597,6 @@ namespace XRMultiplayer
         SerializedProperty m_SyncActivateEventAll;
         SerializedProperty m_FoldoutStates;
 
-        /// <summary>
-        /// Called when the editor is enabled.
-        /// Initializes the serialized properties.
-        /// </summary>
         void OnEnable()
         {
             m_UseInteractingChangedEvent = serializedObject.FindProperty("m_UseInteractingChangedEvent");
@@ -772,9 +616,6 @@ namespace XRMultiplayer
             m_FoldoutStates = serializedObject.FindProperty("m_FoldoutValues");
         }
 
-        /// <summary>
-        /// Called to draw the custom inspector GUI.
-        /// </summary>
         public override void OnInspectorGUI()
         {
             base.OnInspectorGUI();
@@ -788,7 +629,6 @@ namespace XRMultiplayer
                 EditorGUILayout.PropertyField(m_InteractingChangedEvent);
             }
 
-            // Hover Logic
             EditorGUILayout.Space(10);
             SerializedProperty option = m_FoldoutStates.GetArrayElementAtIndex(0);
             option.boolValue = EditorGUILayout.Foldout(option.boolValue, "Hover Options", true);
@@ -811,7 +651,6 @@ namespace XRMultiplayer
                 }
             }
 
-            // Select Logic
             EditorGUILayout.Space(10);
             option = m_FoldoutStates.GetArrayElementAtIndex(1);
             option.boolValue = EditorGUILayout.Foldout(option.boolValue, "Select Options", true);
@@ -834,7 +673,6 @@ namespace XRMultiplayer
                 }
             }
 
-            // Activate Logic
             EditorGUILayout.Space(10);
             option = m_FoldoutStates.GetArrayElementAtIndex(2);
             option.boolValue = EditorGUILayout.Foldout(option.boolValue, "Activate Options", true);

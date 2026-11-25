@@ -68,6 +68,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71a1938d4865e254fa023f2dadb68f47, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
   snapType: WHEEL
   isOccupied: 0
 --- !u!1 &1518819083957332654
@@ -184,6 +185,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71a1938d4865e254fa023f2dadb68f47, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
   snapType: ATTAVVIS
   isOccupied: 0
 --- !u!1 &4585681882026823429
@@ -254,6 +256,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71a1938d4865e254fa023f2dadb68f47, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
   snapType: WHEEL
   isOccupied: 0
 --- !u!1 &6423770866638435758
@@ -274,6 +277,7 @@ GameObject:
   - component: {fileID: 5289657593708788154}
   - component: {fileID: 3346819478509711155}
   - component: {fileID: 6022794378517452850}
+  - component: {fileID: -7754960127366673589}
   m_Layer: 0
   m_Name: AtterrisseurAvant - Fut-2 OSOVINA I CILINDAR-1
   m_TagString: Untagged
@@ -542,7 +546,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 2514207639
+  GlobalObjectIdHash: 4132363357
   InScenePlacedSourceGlobalObjectIdHash: 2891871941
   DeferredDespawnTick: 0
   Ownership: 1
@@ -568,7 +572,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
-  NetworkTransformExpanded: 0
+  NetworkTransformExpanded: 1
   AutoOwnerAuthorityTickOffset: 1
   PositionInterpolationType: 0
   RotationInterpolationType: 0
@@ -579,7 +583,7 @@ MonoBehaviour:
   RotationMaxInterpolationTime: 0.1
   ScaleLerpSmoothing: 1
   ScaleMaxInterpolationTime: 0.1
-  AuthorityMode: 0
+  AuthorityMode: 1
   TickSyncChildren: 0
   UseUnreliableDeltas: 0
   SyncPositionX: 1
@@ -665,6 +669,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da2f046bdce9a7f4cafafc5f746e1666, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
   snapDistance: 0.35
   snapAlignment: 0.65
   snapDuration: 0.25
@@ -692,3 +697,17 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  snapPoints: []
+--- !u!114 &-7754960127366673589
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6423770866638435758}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c2a17a5af91361489870ac8becf0a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1

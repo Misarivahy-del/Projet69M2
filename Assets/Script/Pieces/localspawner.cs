@@ -1,37 +1,28 @@
+using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.XR.Interaction.Toolkit;
 using TMPro;
 
-
-
-public class LocalInteractableSpawner : MonoBehaviour
+public class NetworkInteractableSpawner : NetworkBehaviour
 {
     [Header("Spawn Settings")]
     [SerializeField] private Transform spawnTransform;
     [SerializeField] private GameObject spawnPrefab;
-    [SerializeField]private TMPro.TMP_Text textUI;
+    [SerializeField] private TMP_Text textUI;
 
     public bool freezeOnSpawn = true;
     public float distanceToSpawnNew = 0.15f;
     public float spawnCooldown = 0.5f;
-    public float multiplierscale =0.5f;
-    public float objectlimit=3;
+    public float multiplierscale = 0.5f;
+    public float objectlimit = 3;
     public string objectName;
+
     private float spawnCooldownTimer = 0f;
     private GameObject currentObject;
-    private Vector3 originalScale;
-    private RigidbodyConstraints originalConstraints;
     private float objectcount = 0;
 
     Transform SpawnPoint => spawnTransform != null ? spawnTransform : transform;
-    void Start()
-    {
-        if (textUI != null)
-    {
-        textUI.text = objectName;
-    }
-    }
-    void Awake()
+
+    private void Awake()
     {
         if (spawnPrefab == null)
         {
@@ -40,41 +31,49 @@ public class LocalInteractableSpawner : MonoBehaviour
         }
     }
 
-
-    void Update()
+    private void Start()
     {
-        if (currentObject != null)
-     {
-        if (CheckObjectDistance() && objectcount < objectlimit)
+        if (textUI != null)
         {
-            currentObject = null;
-            spawnCooldownTimer = spawnCooldown;
-            objectcount++;
+            textUI.text = objectName;
         }
     }
-    else
+
+    private void Update()
     {
-        CheckSpawn();
-    }
+        // Seul le serveur gère le spawn et le compteur
+        if (!IsServer) return;
+
+        if (currentObject != null)
+        {
+            if (CheckObjectDistance() && objectcount < objectlimit)
+            {
+                currentObject = null;
+                spawnCooldownTimer = spawnCooldown;
+                objectcount++;
+            }
+        }
+        else
+        {
+            CheckSpawn();
+        }
     }
 
-    void CheckSpawn()
+    private void CheckSpawn()
     {
         if (spawnCooldownTimer > 0)
-    {
-        spawnCooldownTimer -= Time.deltaTime;
-        return;
+        {
+            spawnCooldownTimer -= Time.deltaTime;
+            return;
+        }
+
+        if (objectcount >= objectlimit)
+            return;
+
+        SpawnObject();
     }
 
-    // Bloquer quand la limite est atteinte
-    if (objectcount >= objectlimit)
-        return;
-
-    SpawnObject();
-    }
-
-
-    bool CheckObjectDistance()
+    private bool CheckObjectDistance()
     {
         if (currentObject == null)
             return true;
@@ -85,52 +84,25 @@ public class LocalInteractableSpawner : MonoBehaviour
         ) > distanceToSpawnNew;
     }
 
-    void SpawnObject()
+    private void SpawnObject()
     {
-    spawnCooldownTimer = spawnCooldown;
+        spawnCooldownTimer = spawnCooldown;
 
-    currentObject = Instantiate(
-        spawnPrefab,
-        SpawnPoint.position,
-        SpawnPoint.rotation
-    );
+        // 1. Instanciation locale sur le serveur
+        currentObject = Instantiate(
+            spawnPrefab,
+            SpawnPoint.position,
+            SpawnPoint.rotation
+        );
 
-    originalScale = currentObject.transform.localScale;
+        // 2. Réplication de l'objet sur tout le réseau
+        NetworkObject netObj = currentObject.GetComponent<NetworkObject>();
+        netObj.Spawn();
 
-    // Preview scale
-    currentObject.transform.localScale = originalScale * multiplierscale;
-
-    // --- INTANGIBLE: Freeze complet ---
-    Rigidbody rb = currentObject.GetComponent<Rigidbody>();
-    if (rb != null)
-    {
-        originalConstraints = rb.constraints;      // sauver contraintes normales
-        rb.constraints = RigidbodyConstraints.FreezeAll;
+        // 3. Applique la taille réduite et le gel physique chez tout le monde
+        if (currentObject.TryGetComponent(out NetworkSpawnedItem item))
+        {
+            item.InitializeSpawnStateRpc(multiplierscale, freezeOnSpawn);
+        }
     }
-
-    var grab = currentObject.GetComponent<UnityEngine.XR.Interaction.Toolkit.Interactables.XRGrabInteractable>();
-    if (grab != null)
-        grab.selectEntered.AddListener(OnObjectGrabbed);
-    }
-
-
-void OnObjectGrabbed(SelectEnterEventArgs args)
-    {
-    Transform t = args.interactableObject.transform;
-
-    Rigidbody rb = t.GetComponent<Rigidbody>();
-    if (rb != null)
-    {
-        rb.constraints = originalConstraints;   // restaurer les contraintes du prefab
-    }
-
-    // Restaure la taille normale
-    t.localScale = originalScale;
-
-    var grab = t.GetComponent<UnityEngine.XR.Interaction.Toolkit.Interactables.XRGrabInteractable>();
-    if (grab != null)
-        grab.selectEntered.RemoveListener(OnObjectGrabbed);
-    }
-
-
 }

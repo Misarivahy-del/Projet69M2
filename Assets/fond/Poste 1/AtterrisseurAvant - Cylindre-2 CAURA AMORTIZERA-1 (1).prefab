@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71a1938d4865e254fa023f2dadb68f47, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
   snapType: CYL
   isOccupied: 0
 --- !u!65 &3679073646627115745
@@ -113,6 +114,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71a1938d4865e254fa023f2dadb68f47, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
   snapType: RPAN
   isOccupied: 0
 --- !u!136 &3032138341035350394
@@ -183,6 +185,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71a1938d4865e254fa023f2dadb68f47, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
   snapType: PISTREL
   isOccupied: 0
 --- !u!136 &6694073555085149994
@@ -253,6 +256,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71a1938d4865e254fa023f2dadb68f47, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
   snapType: SVET
   isOccupied: 0
 --- !u!136 &6185607029455788317
@@ -291,8 +295,11 @@ GameObject:
   - component: {fileID: 71593039483603256}
   - component: {fileID: 7520063033443974969}
   - component: {fileID: 1602990554657991388}
+  - component: {fileID: 8589844601751456617}
   - component: {fileID: 1254304687571049172}
   - component: {fileID: 6855516304788068915}
+  - component: {fileID: 6921959562370936910}
+  - component: {fileID: 4861098265130028002}
   m_Layer: 0
   m_Name: AtterrisseurAvant - Cylindre-2 CAURA AMORTIZERA-1 (1)
   m_TagString: Untagged
@@ -534,6 +541,31 @@ MonoBehaviour:
   m_LimitAngularVelocity: 0
   m_MaxLinearVelocityDelta: 10
   m_MaxAngularVelocityDelta: 20
+--- !u!114 &8589844601751456617
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2478301223911603782}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 2602230912
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
 --- !u!114 &1254304687571049172
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -546,6 +578,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da2f046bdce9a7f4cafafc5f746e1666, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
   snapDistance: 0.35
   snapAlignment: 0.65
   snapDuration: 0.25
@@ -573,6 +606,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  snapPoints: []
 --- !u!65 &6855516304788068915
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -594,6 +628,65 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 3.0900755, y: 12.000001, z: 13.964648}
   m_Center: {x: 0.09357637, y: -0.44378376, z: -3.2811913}
+--- !u!114 &6921959562370936910
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2478301223911603782}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c2a17a5af91361489870ac8becf0a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+--- !u!114 &4861098265130028002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2478301223911603782}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e96cb6065543e43c4a752faaa1468eb1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+  NetworkTransformExpanded: 0
+  AutoOwnerAuthorityTickOffset: 1
+  PositionInterpolationType: 0
+  RotationInterpolationType: 0
+  ScaleInterpolationType: 0
+  PositionLerpSmoothing: 1
+  PositionMaxInterpolationTime: 0.1
+  RotationLerpSmoothing: 1
+  RotationMaxInterpolationTime: 0.1
+  ScaleLerpSmoothing: 1
+  ScaleMaxInterpolationTime: 0.1
+  AuthorityMode: 1
+  TickSyncChildren: 0
+  UseUnreliableDeltas: 0
+  SyncPositionX: 1
+  SyncPositionY: 1
+  SyncPositionZ: 1
+  SyncRotAngleX: 1
+  SyncRotAngleY: 1
+  SyncRotAngleZ: 1
+  SyncScaleX: 1
+  SyncScaleY: 1
+  SyncScaleZ: 1
+  PositionThreshold: 0.001
+  RotAngleThreshold: 0.01
+  ScaleThreshold: 0.01
+  UseQuaternionSynchronization: 0
+  UseQuaternionCompression: 0
+  UseHalfFloatPrecision: 0
+  InLocalSpace: 0
+  SwitchTransformSpaceWhenParented: 0
+  Interpolate: 1
+  SlerpPosition: 0
 --- !u!1 &2708483885333859961
 GameObject:
   m_ObjectHideFlags: 0
@@ -639,6 +732,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71a1938d4865e254fa023f2dadb68f47, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
   snapType: LPAN
   isOccupied: 0
 --- !u!136 &5062626367526573084
@@ -709,6 +803,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71a1938d4865e254fa023f2dadb68f47, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
   snapType: LJOUE
   isOccupied: 0
 --- !u!136 &2701363461808514864
@@ -779,6 +874,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71a1938d4865e254fa023f2dadb68f47, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
   snapType: RJOUE
   isOccupied: 0
 --- !u!136 &6715145817228083033
@@ -849,6 +945,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71a1938d4865e254fa023f2dadb68f47, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
   snapType: KAB
   isOccupied: 0
 --- !u!136 &6169990911046522991
@@ -919,6 +1016,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71a1938d4865e254fa023f2dadb68f47, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
   snapType: CYL1
   isOccupied: 0
 --- !u!135 &2760854841017825233
@@ -987,6 +1085,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71a1938d4865e254fa023f2dadb68f47, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
   snapType: VISTRIGBRAS
   isOccupied: 0
 --- !u!136 &1666478966994314062
